@@ -1,0 +1,332 @@
+Startpoint: N3 (input port)
+Endpoint: N22 (output port)
+Path Group: unconstrained
+Path Type: max
+
+  Delay    Time   Description
+---------------------------------------------------------
+   0.00    0.00 ^ input external delay
+   0.00    0.00 ^ N3 (in)
+   0.09    0.09 ^ input3/X (sky130_fd_sc_hd__clkbuf_1)
+   0.07    0.16 v _1_/Y (sky130_fd_sc_hd__nand2_1)
+   0.17    0.33 v _3_/X (sky130_fd_sc_hd__a22o_1)
+   0.10    0.43 v output6/X (sky130_fd_sc_hd__buf_2)
+   0.00    0.43 v N22 (out)
+           0.43   data arrival time
+---------------------------------------------------------
+(Path is unconstrained)
+
+
+Startpoint: N6 (input port)
+Endpoint: N22 (output port)
+Path Group: unconstrained
+Path Type: max
+
+  Delay    Time   Description
+---------------------------------------------------------
+   0.00    0.00 ^ input external delay
+   0.00    0.00 ^ N6 (in)
+   0.07    0.07 ^ input4/X (sky130_fd_sc_hd__clkbuf_1)
+   0.06    0.12 v _1_/Y (sky130_fd_sc_hd__nand2_1)
+   0.17    0.29 v _3_/X (sky130_fd_sc_hd__a22o_1)
+   0.10    0.40 v output6/X (sky130_fd_sc_hd__buf_2)
+   0.00    0.40 v N22 (out)
+           0.40   data arrival time
+---------------------------------------------------------
+(Path is unconstrained)
+
+
+Startpoint: N1 (input port)
+Endpoint: N22 (output port)
+Path Group: unconstrained
+Path Type: max
+
+  Delay    Time   Description
+---------------------------------------------------------
+   0.00    0.00 v input external delay
+   0.00    0.00 v N1 (in)
+   0.07    0.07 v input1/X (sky130_fd_sc_hd__clkbuf_1)
+   0.21    0.29 v _3_/X (sky130_fd_sc_hd__a22o_1)
+   0.10    0.39 v output6/X (sky130_fd_sc_hd__buf_2)
+   0.00    0.39 v N22 (out)
+           0.39   data arrival time
+---------------------------------------------------------
+(Path is unconstrained)
+
+
+Startpoint: N3 (input port)
+Endpoint: N22 (output port)
+Path Group: unconstrained
+Path Type: max
+
+  Delay    Time   Description
+---------------------------------------------------------
+   0.00    0.00 v input external delay
+   0.00    0.00 v N3 (in)
+   0.08    0.08 v input3/X (sky130_fd_sc_hd__clkbuf_1)
+   0.20    0.28 v _3_/X (sky130_fd_sc_hd__a22o_1)
+   0.10    0.38 v output6/X (sky130_fd_sc_hd__buf_2)
+   0.00    0.38 v N22 (out)
+           0.38   data arrival time
+---------------------------------------------------------
+(Path is unconstrained)
+
+
+Startpoint: N2 (input port)
+Endpoint: N22 (output port)
+Path Group: unconstrained
+Path Type: max
+
+  Delay    Time   Description
+---------------------------------------------------------
+   0.00    0.00 v input external delay
+   0.00    0.00 v N2 (in)
+   0.08    0.08 v input2/X (sky130_fd_sc_hd__clkbuf_1)
+   0.19    0.27 v _3_/X (sky130_fd_sc_hd__a22o_1)
+   0.10    0.37 v output6/X (sky130_fd_sc_hd__buf_2)
+   0.00    0.37 v N22 (out)
+           0.37   data arrival time
+---------------------------------------------------------
+(Path is unconstrained)
+
+
+Startpoint: N3 (input port)
+Endpoint: N22 (output port)
+Path Group: unconstrained
+Path Type: max
+
+  Delay    Time   Description
+---------------------------------------------------------
+   0.00    0.00 v input external delay
+   0.00    0.00 v N3 (in)
+   0.08    0.08 v input3/X (sky130_fd_sc_hd__clkbuf_1)
+   0.08    0.16 ^ _1_/Y (sky130_fd_sc_hd__nand2_1)
+   0.12    0.27 ^ _3_/X (sky130_fd_sc_hd__a22o_1)
+   0.08    0.35 ^ output6/X (sky130_fd_sc_hd__buf_2)
+   0.00    0.35 ^ N22 (out)
+           0.35   data arrival time
+---------------------------------------------------------
+(Path is unconstrained)
+
+
+Startpoint: N2 (input port)
+Endpoint: N23 (output port)
+Path Group: unconstrained
+Path Type: max
+
+  Delay    Time   Description
+---------------------------------------------------------
+   0.00    0.00 v input external delay
+   0.00    0.00 v N2 (in)
+   0.08    0.08 v input2/X (sky130_fd_sc_hd__clkbuf_1)
+   0.17    0.25 v _2_/X (sky130_fd_sc_hd__o21a_1)
+   0.10    0.35 v output7/X (sky130_fd_sc_hd__buf_2)
+   0.00    0.35 v N23 (out)
+           0.35   data arrival time
+---------------------------------------------------------
+(Path is unconstrained)
+
+
+Startpoint: N3 (input port)
+Endpoint: N23 (output port)
+Path Group: unconstrained
+Path Type: max
+
+  Delay    Time   Description
+---------------------------------------------------------
+   0.00    0.00 ^ input external delay
+   0.00    0.00 ^ N3 (in)
+   0.09    0.09 ^ input3/X (sky130_fd_sc_hd__clkbuf_1)
+   0.07    0.16 v _1_/Y (sky130_fd_sc_hd__nand2_1)
+   0.10    0.25 v _2_/X (sky130_fd_sc_hd__o21a_1)
+   0.10    0.35 v output7/X (sky130_fd_sc_hd__buf_2)
+   0.00    0.35 v N23 (out)
+           0.35   data arrival time
+---------------------------------------------------------
+(Path is unconstrained)
+
+
+Startpoint: N3 (input port)
+Endpoint: N23 (output port)
+Path Group: unconstrained
+Path Type: max
+
+  Delay    Time   Description
+---------------------------------------------------------
+   0.00    0.00 v input external delay
+   0.00    0.00 v N3 (in)
+   0.08    0.08 v input3/X (sky130_fd_sc_hd__clkbuf_1)
+   0.08    0.16 ^ _1_/Y (sky130_fd_sc_hd__nand2_1)
+   0.11    0.27 ^ _2_/X (sky130_fd_sc_hd__o21a_1)
+   0.08    0.34 ^ output7/X (sky130_fd_sc_hd__buf_2)
+   0.00    0.34 ^ N23 (out)
+           0.34   data arrival time
+---------------------------------------------------------
+(Path is unconstrained)
+
+
+Startpoint: N6 (input port)
+Endpoint: N22 (output port)
+Path Group: unconstrained
+Path Type: max
+
+  Delay    Time   Description
+---------------------------------------------------------
+   0.00    0.00 v input external delay
+   0.00    0.00 v N6 (in)
+   0.07    0.07 v input4/X (sky130_fd_sc_hd__clkbuf_1)
+   0.06    0.13 ^ _1_/Y (sky130_fd_sc_hd__nand2_1)
+   0.12    0.25 ^ _3_/X (sky130_fd_sc_hd__a22o_1)
+   0.08    0.33 ^ output6/X (sky130_fd_sc_hd__buf_2)
+   0.00    0.33 ^ N22 (out)
+           0.33   data arrival time
+---------------------------------------------------------
+(Path is unconstrained)
+
+
+Startpoint: N7 (input port)
+Endpoint: N23 (output port)
+Path Group: unconstrained
+Path Type: max
+
+  Delay    Time   Description
+---------------------------------------------------------
+   0.00    0.00 v input external delay
+   0.00    0.00 v N7 (in)
+   0.07    0.07 v input5/X (sky130_fd_sc_hd__clkbuf_1)
+   0.15    0.22 v _2_/X (sky130_fd_sc_hd__o21a_1)
+   0.10    0.32 v output7/X (sky130_fd_sc_hd__buf_2)
+   0.00    0.32 v N23 (out)
+           0.32   data arrival time
+---------------------------------------------------------
+(Path is unconstrained)
+
+
+Startpoint: N6 (input port)
+Endpoint: N23 (output port)
+Path Group: unconstrained
+Path Type: max
+
+  Delay    Time   Description
+---------------------------------------------------------
+   0.00    0.00 v input external delay
+   0.00    0.00 v N6 (in)
+   0.07    0.07 v input4/X (sky130_fd_sc_hd__clkbuf_1)
+   0.06    0.13 ^ _1_/Y (sky130_fd_sc_hd__nand2_1)
+   0.11    0.24 ^ _2_/X (sky130_fd_sc_hd__o21a_1)
+   0.08    0.32 ^ output7/X (sky130_fd_sc_hd__buf_2)
+   0.00    0.32 ^ N23 (out)
+           0.32   data arrival time
+---------------------------------------------------------
+(Path is unconstrained)
+
+
+Startpoint: N6 (input port)
+Endpoint: N23 (output port)
+Path Group: unconstrained
+Path Type: max
+
+  Delay    Time   Description
+---------------------------------------------------------
+   0.00    0.00 ^ input external delay
+   0.00    0.00 ^ N6 (in)
+   0.07    0.07 ^ input4/X (sky130_fd_sc_hd__clkbuf_1)
+   0.06    0.12 v _1_/Y (sky130_fd_sc_hd__nand2_1)
+   0.10    0.22 v _2_/X (sky130_fd_sc_hd__o21a_1)
+   0.10    0.31 v output7/X (sky130_fd_sc_hd__buf_2)
+   0.00    0.31 v N23 (out)
+           0.31   data arrival time
+---------------------------------------------------------
+(Path is unconstrained)
+
+
+Startpoint: N3 (input port)
+Endpoint: N22 (output port)
+Path Group: unconstrained
+Path Type: max
+
+  Delay    Time   Description
+---------------------------------------------------------
+   0.00    0.00 ^ input external delay
+   0.00    0.00 ^ N3 (in)
+   0.09    0.09 ^ input3/X (sky130_fd_sc_hd__clkbuf_1)
+   0.13    0.22 ^ _3_/X (sky130_fd_sc_hd__a22o_1)
+   0.08    0.30 ^ output6/X (sky130_fd_sc_hd__buf_2)
+   0.00    0.30 ^ N22 (out)
+           0.30   data arrival time
+---------------------------------------------------------
+(Path is unconstrained)
+
+
+Startpoint: N2 (input port)
+Endpoint: N22 (output port)
+Path Group: unconstrained
+Path Type: max
+
+  Delay    Time   Description
+---------------------------------------------------------
+   0.00    0.00 ^ input external delay
+   0.00    0.00 ^ N2 (in)
+   0.09    0.09 ^ input2/X (sky130_fd_sc_hd__clkbuf_1)
+   0.13    0.22 ^ _3_/X (sky130_fd_sc_hd__a22o_1)
+   0.08    0.30 ^ output6/X (sky130_fd_sc_hd__buf_2)
+   0.00    0.30 ^ N22 (out)
+           0.30   data arrival time
+---------------------------------------------------------
+(Path is unconstrained)
+
+
+Startpoint: N2 (input port)
+Endpoint: N23 (output port)
+Path Group: unconstrained
+Path Type: max
+
+  Delay    Time   Description
+---------------------------------------------------------
+   0.00    0.00 ^ input external delay
+   0.00    0.00 ^ N2 (in)
+   0.09    0.09 ^ input2/X (sky130_fd_sc_hd__clkbuf_1)
+   0.12    0.21 ^ _2_/X (sky130_fd_sc_hd__o21a_1)
+   0.08    0.29 ^ output7/X (sky130_fd_sc_hd__buf_2)
+   0.00    0.29 ^ N23 (out)
+           0.29   data arrival time
+---------------------------------------------------------
+(Path is unconstrained)
+
+
+Startpoint: N1 (input port)
+Endpoint: N22 (output port)
+Path Group: unconstrained
+Path Type: max
+
+  Delay    Time   Description
+---------------------------------------------------------
+   0.00    0.00 ^ input external delay
+   0.00    0.00 ^ N1 (in)
+   0.07    0.07 ^ input1/X (sky130_fd_sc_hd__clkbuf_1)
+   0.13    0.20 ^ _3_/X (sky130_fd_sc_hd__a22o_1)
+   0.08    0.28 ^ output6/X (sky130_fd_sc_hd__buf_2)
+   0.00    0.28 ^ N22 (out)
+           0.28   data arrival time
+---------------------------------------------------------
+(Path is unconstrained)
+
+
+Startpoint: N7 (input port)
+Endpoint: N23 (output port)
+Path Group: unconstrained
+Path Type: max
+
+  Delay    Time   Description
+---------------------------------------------------------
+   0.00    0.00 ^ input external delay
+   0.00    0.00 ^ N7 (in)
+   0.07    0.07 ^ input5/X (sky130_fd_sc_hd__clkbuf_1)
+   0.10    0.16 ^ _2_/X (sky130_fd_sc_hd__o21a_1)
+   0.08    0.24 ^ output7/X (sky130_fd_sc_hd__buf_2)
+   0.00    0.24 ^ N23 (out)
+           0.24   data arrival time
+---------------------------------------------------------
+(Path is unconstrained)
+
+
