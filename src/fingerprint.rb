@@ -5,7 +5,7 @@ REPORTS_DIR = File.expand_path("../reports", __dir__)
 # ---- helpers --
 
 def normalize_trace(trace)
-  # retire le buffer pour avoir des traces
+  # retire le buffer pour avoir des traces identiques entre ref et test
   trace.reject { |t| t.start_with?("eco_buffer_") }
 end
 
