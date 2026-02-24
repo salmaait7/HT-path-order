@@ -2,24 +2,25 @@ require_relative 'parser'
 
 REPORTS_DIR = File.expand_path("../reports", __dir__)
 
-# ---- helpers ----
-def build_delay_map(paths, key_mode: :start_end)
+# ---- helpers --
+
+def normalize_trace(trace)
+  # retire le buffer pour avoir des traces
+  trace.reject { |t| t.start_with?("eco_buffer_") }
+end
+
+def build_delay_map(paths)
   m = {}
 
   paths.each do |p|
     next if p['delay'].nil?
 
-    key =
-      case key_mode
-      when :start_end
-        [p['startpoint'], p['endpoint']]
-      when :start_end_trace
-        [p['startpoint'], p['endpoint'], p['trace'].join('|')]
-      else
-        raise "Unknown key_mode: #{key_mode}"
-      end
+    trace = p['trace']
+    norm_trace = normalize_trace(trace)
 
-    m[key] = p['delay'] if !m.key?(key) || p['delay'] > m[key]
+    key = [p['startpoint'], p['endpoint'], norm_trace.join('|')]
+
+    m[key] = p['delay']
   end
 
   m
@@ -54,6 +55,7 @@ def count_violations(fp, delay_map_test, th)
     test = label(delay_map_test[ki], delay_map_test[kj], th)
     used += 1
     v += 1 if test != ref
+    # puts "Violation: #{ki} vs #{kj} - expected #{ref}, got #{test}" if test != ref
   end
 
   [v, used]
@@ -66,8 +68,8 @@ f_test  = File.join(REPORTS_DIR, "all_paths_withHT.rpt")
 paths_clean = parse_timing_repo(f_clean)
 paths_test  = parse_timing_repo(f_test)
 
-m_clean = build_delay_map(paths_clean, key_mode: :start_end)
-m_test  = build_delay_map(paths_test,  key_mode: :start_end)
+m_clean = build_delay_map(paths_clean)
+m_test  = build_delay_map(paths_test)
 
 th = 0.07  
 fp = build_fingerprint(m_clean, th)
@@ -75,7 +77,6 @@ violations, used = count_violations(fp, m_test, th)
 
 rate = used.zero? ? 0.0 : violations.to_f / used
 
-puts "Threshold th = #{th}"
 puts "Pairs in fingerprint: #{fp.size}"
 puts "Violations: #{violations}"
 puts "Violation rate: #{(rate * 100).round(2)}%"
