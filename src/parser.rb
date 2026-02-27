@@ -1,5 +1,5 @@
-REPORTS_DIR = File.expand_path("../reports", __dir__)
-NUM = /[-+]?(?:\d+(?:\.\d*)?|\.\d+)(?:[eE][-+]?\d+)?/
+# REPORTS_DIR = File.expand_path("../reports", __dir__)
+NUM = /(?:\d+(?:\.\d*)?|\.\d+)/
 
 def parse_timing_repo(filename)
   content  = File.read(filename)
@@ -32,8 +32,10 @@ def parse_timing_repo(filename)
       end
 
       if in_trace && !line.strip.empty?
-        if (m = line.match(/\s([A-Za-z_][\w.\[\]\/]*)\s*\(/))
-          trace << m[1]
+       if (m = line.match(/^\s*#{NUM.source}\s+#{NUM.source}\s+([\^v])\s+(\S+)\s*\(/))
+          edge = m[1]
+          signal = m[2]
+          trace << "#{edge}:#{signal}"
         end
       end
 
