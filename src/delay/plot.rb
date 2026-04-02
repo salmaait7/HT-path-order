@@ -1,5 +1,6 @@
 GNUPLOT    = "C:/Program Files/gnuplot/bin/gnuplot.exe"
-REPORTS_DIR = File.expand_path("../reports", __dir__)
+REPORTS_DIR = File.expand_path("../../reports", __dir__) unless defined?(REPORTS_DIR)
+
 require_relative "parser"
 
 def write_dat(datfile, paths, x_index, jitter)
@@ -38,20 +39,22 @@ def plot(out_png, x_labels, series)
   system(GNUPLOT, gp_file)
 end
 
-# - main -
-f0 = File.join(REPORTS_DIR, "all_paths_sansHT.rpt")
-f1 = File.join(REPORTS_DIR, "all_paths_withHT.rpt")
+if __FILE__ == $0
+  # - main -
+  f0 = File.join(REPORTS_DIR, "all_paths_sansHT.rpt")
+  f1 = File.join(REPORTS_DIR, "all_paths_withHT3.rpt")
 
-p0 = parse_timing_repo(f0)
-p1 = parse_timing_repo(f1)
+  p0 = parse_timing_repo(f0)
+  p1 = parse_timing_repo(f1)
 
-x_labels = (p0.map{|p| p["startpoint"]} + p1.map{|p| p["startpoint"]}).uniq.sort
-x_index  = x_labels.each_with_index.to_h
+  x_labels = (p0.map{|p| p["startpoint"]} + p1.map{|p| p["startpoint"]}).uniq.sort
+  x_index  = x_labels.each_with_index.to_h
 
-write_dat("no_ht.dat",   p0, x_index, -0.12)
-write_dat("with_ht.dat", p1, x_index,  0.12)
+  write_dat("no_ht.dat",   p0, x_index, -0.12)
+  write_dat("with_ht.dat", p1, x_index,  0.12)
 
-plot("comparison.png", x_labels, [
-  {name: "No HT",   dat: "no_ht.dat"},
-  {name: "With HT", dat: "with_ht.dat"}
-])
+  plot("comparison.png", x_labels, [
+    {name: "No HT",   dat: "no_ht.dat"},
+    {name: "With HT", dat: "with_ht.dat"}
+  ])
+end

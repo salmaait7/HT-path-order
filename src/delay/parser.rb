@@ -1,4 +1,3 @@
-# REPORTS_DIR = File.expand_path("../reports", __dir__)
 NUM = /(?:\d+(?:\.\d*)?|\.\d+)/
 
 def parse_timing_repo(filename)
@@ -31,11 +30,16 @@ def parse_timing_repo(filename)
         in_trace = false
       end
 
+      # if in_trace && !line.strip.empty?
+      #  if (m = line.match(/^\s*#{NUM.source}\s+#{NUM.source}\s+([\^v])\s+(\S+)\s*\(/))
+      #     edge = m[1]
+      #     signal = m[2]
+      #     trace << "#{edge}:#{signal}"
+      #   end
+      # end
       if in_trace && !line.strip.empty?
-       if (m = line.match(/^\s*#{NUM.source}\s+#{NUM.source}\s+([\^v])\s+(\S+)\s*\(/))
-          edge = m[1]
-          signal = m[2]
-          trace << "#{edge}:#{signal}"
+        if (m = line.match(/\s([A-Za-z_][\w.\[\]\/]*)\s*\(/))
+          trace << m[1]
         end
       end
 
@@ -68,18 +72,4 @@ def parse_timing_repo(filename)
   best.values
 end
 
-
-
-  # file = File.join(REPORTS_DIR, 'all_paths_sansHT.rpt')
-  # if File.exist?(file)
-  #   puts "Test (#{file}):"
-  #   paths = parse_timing_repo(file)
-  #   puts "  Chemins trouvés: #{paths.length}"
-  #   # if paths.size > 0
-  #   #   first_key, first_delay = paths.first['startpoint'], paths.first['delay']
-  #   #   puts "  Premier chemin: #{first_key.inspect} => #{first_delay}"
-  #   # end
-  # else
-  #   puts "Fichier test non trouvé: #{file}"
-  # end
 
