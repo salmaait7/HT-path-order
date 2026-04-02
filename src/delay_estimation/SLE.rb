@@ -53,10 +53,26 @@ class CompositeGate < Gate
 end
 
 
+class Path
+  attr_accessor :gates
+
+  def initialize(gates)
+    @gates = gates
+  end
+
+  def delay
+    @gates.sum(&:delay)
+  end
+end
+
+
 
 # g1 = CompositeGate.new(type: 'AND', name: 'G1', output: 'Y', inputs: ['A', 'B'], h: 2.0)
 # g2 = CompositeGate.new(type: 'OR',  name: 'G2', output: 'Z', inputs: ['A', 'B'], h: 2.0)
 # g3 = Gate.new(type: 'NAND', name: 'G3', output: 'W', inputs: ['A', 'B'], h: 2.0)
+
+# path1 = Path.new([g1, g2])
+# puts "AND-OR path delay = #{path1.delay}"
 
 
 # puts "AND delay = #{g1.delay}"
