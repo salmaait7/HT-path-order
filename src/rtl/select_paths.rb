@@ -15,7 +15,7 @@ def find_paths_to_output(circuit, output)
     gate.inputs.each do |input|
       sub_paths = find_paths_to_output(circuit, input)
       sub_paths.each do |sub_path|
-        paths << sub_path + [gate.type] + [output]
+        paths << sub_path + [gate.name] + [output]
       end
     end
   end

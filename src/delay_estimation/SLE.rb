@@ -60,6 +60,7 @@ class Path
     @gates = gates
   end
 
+
   def delay
     @gates.sum(&:delay)
   end
