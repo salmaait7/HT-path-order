@@ -1,5 +1,3 @@
-require_relative '../delay_estimation/SLE'
-
 class Circuit
   attr_accessor :name, :inputs, :outputs, :wires, :gates
 
@@ -9,6 +7,33 @@ class Circuit
     @outputs = []
     @wires = []
     @gates = []
+  end
+
+  def fanout_gates(signal)
+    @gates.select { |g| g.inputs.include?(signal) }
+  end
+
+
+  def output_load(gate)
+    sinks = fanout_gates(gate.output)
+    load = sinks.sum(&:input_capacitance)
+    load += 1.0 if @outputs.include?(gate.output)
+    load = 1.0 if load == 0.0
+
+    load
+  end
+
+  def electrical_effort(gate)
+    cin = gate.input_capacitance
+    cout = output_load(gate)
+
+    return 1.0 if cin == 0.0
+    cout / cin
+  end
+
+  def gate_delay(gate)
+    h = electrical_effort(gate)
+    gate.delay(h)
   end
 end
 
@@ -40,7 +65,6 @@ class NetlistParser
     
   
   def parse_signal_list(str)
-        # str.split(',').map(&:strip).reject(&:empty?)
         str.sub(';', '').split(',').map(&:strip).reject(&:empty?)
 
   end
@@ -56,7 +80,14 @@ class NetlistParser
     gate_output = ports[0]
     gate_inputs = ports[1..-1]
 
-    Gate.new(
+    gate_class = case gate_type.upcase
+                 when 'AND', 'OR'  # TODO : add more composite gates 
+                   CompositeGate
+                 else
+                   Gate
+                 end
+
+    gate_class.new(
       type: gate_type,
       name: gate_name,
       output: gate_output,

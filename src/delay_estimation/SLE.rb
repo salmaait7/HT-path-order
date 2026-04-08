@@ -1,16 +1,42 @@
-class Gate
-  attr_accessor :type, :name, :output, :inputs, :h
 
-  def initialize(type:, name:, output:, inputs:, h: 1.0)
+class Gate
+  attr_accessor :type, :name, :output, :inputs
+
+  def initialize(type:, name:, output:, inputs:)
     @type = type.upcase
     @name = name
     @output = output
     @inputs = inputs
-    @h = h
   end
 
+  def delay(h)
+    le = logical_effort
+    le[:p] + le[:g] * h
+  end
+
+  def input_count
+    @inputs.length
+  end
+
+
+  def input_capacitance
+    n = input_count
+
+    case @type
+    when 'INV'
+      1.0
+    when 'NAND'
+      (n + 2.0) / 3.0
+    when 'NOR'
+      (2.0 * n + 1.0) / 3.0
+    else
+      1.0
+    end
+  end
+
+
   def logical_effort
-    n = @inputs.length
+    n = input_count
 
     case @type
     when 'INV', 'NOT'
@@ -27,24 +53,20 @@ class Gate
     end
   end
 
-  def delay
-    params = logical_effort
-    params[:g] * @h + params[:p]
-  end
 end
 
-class CompositeGate < Gate  
-  def delay
+class CompositeGate < Gate
+  def delay(h)
     case @type
     when 'AND'
-      nand = Gate.new(type: 'NAND', name: "#{@name}_nand", output: 'n1', inputs: @inputs, h: @h)
+      nand = Gate.new(type: 'NAND', name: "#{@name}_nand", output: 'n1', inputs: @inputs, h: h)
       inv  = Gate.new(type: 'INV',  name: "#{@name}_inv",  output: @output, inputs: ['n1'], h: 1.0)
-      nand.delay + inv.delay
+      nand.delay(h) + inv.delay(1.0)
 
     when 'OR'
-      nor = Gate.new(type: 'NOR', name: "#{@name}_nor", output: 'n1', inputs: @inputs, h: @h)
+      nor = Gate.new(type: 'NOR', name: "#{@name}_nor", output: 'n1', inputs: @inputs, h: h)
       inv = Gate.new(type: 'INV', name: "#{@name}_inv", output: @output, inputs: ['n1'], h: 1.0)
-      nor.delay + inv.delay
+      nor.delay(h) + inv.delay(1.0)
 
     else
       raise "Unsupported type #{@type}"
@@ -60,9 +82,10 @@ class Path
     @gates = gates
   end
 
+  def delay(circuit)
+    raise ArgumentError, 'Missing circuit for delay calculation' unless circuit
 
-  def delay
-    @gates.sum(&:delay)
+    @gates.sum { |g| circuit.gate_delay(g) } # we ignore wire delay for now
   end
 end
 
