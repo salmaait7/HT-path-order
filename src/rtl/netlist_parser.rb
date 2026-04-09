@@ -17,7 +17,7 @@ class Circuit
   def output_load(gate)
     sinks = fanout_gates(gate.output)
     load = sinks.sum(&:input_capacitance)
-    load += 1.0 if @outputs.include?(gate.output)
+    load += 1.0 if @outputs.include?(gate.output) # add load for output pin if gate drives a circuit output
     load = 1.0 if load == 0.0
 
     load
@@ -35,6 +35,26 @@ class Circuit
     h = electrical_effort(gate)
     gate.delay(h)
   end
+
+  def find_paths_to_output(output)
+    if inputs.include?(output)
+      return [Path.new([], output, output)]
+    end
+
+    paths = []
+    gates.select { |g| g.output == output }.each do |gate|
+      gate.inputs.each do |input|
+        sub_paths = find_paths_to_output(input)
+        sub_paths.each do |sub_path|
+          paths << Path.new(sub_path.gates + [gate], sub_path.startpoint, output)
+        end
+      end
+    end
+    paths
+  end
+
+
+
 end
 
 class NetlistParser
@@ -81,7 +101,7 @@ class NetlistParser
     gate_inputs = ports[1..-1]
 
     gate_class = case gate_type.upcase
-                 when 'AND', 'OR'  # TODO : add more composite gates 
+                 when 'AND', 'OR'  # TODO : i need to add more composite gates 
                    CompositeGate
                  else
                    Gate
@@ -94,7 +114,5 @@ class NetlistParser
       inputs: gate_inputs
     )
   end
-
-
 
 end

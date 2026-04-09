@@ -7,5 +7,8 @@ require_relative "./rtl/select_paths.rb"
 
 require_relative "./delay_estimation/SLE.rb"
 
+require_relative "./fingerprint/fp1.rb"
+require_relative "./fingerprint/fp2.rb"
+require_relative "./fingerprint/fp3.rb"
 
 

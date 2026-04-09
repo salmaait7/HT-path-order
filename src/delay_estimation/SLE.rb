@@ -76,10 +76,33 @@ end
 
 
 class Path
-  attr_accessor :gates
+  include Enumerable
+  attr_accessor :gates, :startpoint, :endpoint
 
-  def initialize(gates)
+  def initialize(gates, startpoint = nil, endpoint = nil)
     @gates = gates
+    @startpoint = startpoint
+    @endpoint = endpoint
+  end
+
+  def node_trace
+    trace = []
+    trace << @startpoint if @startpoint
+    trace.concat(@gates.map(&:name))
+    trace << @endpoint if @endpoint && @endpoint != @startpoint
+    trace
+  end
+
+  def each(&block)
+    node_trace.each(&block)
+  end
+
+  def join(separator = $,, &block)
+    node_trace.join(separator, &block)
+  end
+
+  def to_a
+    node_trace.dup
   end
 
   def delay(circuit)
