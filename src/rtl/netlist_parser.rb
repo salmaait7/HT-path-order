@@ -32,8 +32,14 @@ class Circuit
   end
 
   def gate_delay(gate)
-    h = electrical_effort(gate)
-    gate.delay(h)
+     load = output_load(gate)
+
+    if gate.is_a?(CompositeGate)
+       gate.delay(load)
+    else
+       h = load / gate.input_capacitance
+       gate.delay(h)
+    end
   end
 
   def find_paths_to_output(output)

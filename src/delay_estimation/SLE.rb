@@ -56,21 +56,23 @@ class Gate
 end
 
 class CompositeGate < Gate
-  def delay(h)
+  def delay(load_cap)
     case @type
     when 'AND'
-      nand = Gate.new(type: 'NAND', name: "#{@name}_nand", output: 'n1', inputs: @inputs, h: h)
-      inv  = Gate.new(type: 'INV',  name: "#{@name}_inv",  output: @output, inputs: ['n1'], h: 1.0)
-      nand.delay(h) + inv.delay(1.0)
+      first_stage = Gate.new(type: 'NAND', name: "#{@name}_nand", output: 'n1', inputs: @inputs)
+      second_stage = Gate.new(type: 'INV', name: "#{@name}_inv", output: @output, inputs: ['n1'])
 
     when 'OR'
-      nor = Gate.new(type: 'NOR', name: "#{@name}_nor", output: 'n1', inputs: @inputs, h: h)
-      inv = Gate.new(type: 'INV', name: "#{@name}_inv", output: @output, inputs: ['n1'], h: 1.0)
-      nor.delay(h) + inv.delay(1.0)
-
+      first_stage = Gate.new(type: 'NOR', name: "#{@name}_nor", output: 'n1', inputs: @inputs)
+      second_stage = Gate.new(type: 'INV', name: "#{@name}_inv", output: @output, inputs: ['n1'])
     else
       raise "Unsupported type #{@type}"
     end
+    h1 = second_stage.input_capacitance / first_stage.input_capacitance
+
+    h2 = load_cap.to_f / second_stage.input_capacitance
+    first_stage.delay(h1) + second_stage.delay(h2)
+
   end
 end
 
