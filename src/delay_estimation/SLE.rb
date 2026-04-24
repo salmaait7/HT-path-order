@@ -9,8 +9,9 @@ class Gate
     @inputs = inputs
   end
 
-  def delay(h)
+  def delay(load_cap)
     le = logical_effort
+    h = load_cap.to_f / input_capacitance
     le[:p] + le[:g] * h
   end
 
@@ -65,20 +66,19 @@ class CompositeGate < Gate
     when 'OR'
       first_stage = Gate.new(type: 'NOR', name: "#{@name}_nor", output: 'n1', inputs: @inputs)
       second_stage = Gate.new(type: 'INV', name: "#{@name}_inv", output: @output, inputs: ['n1'])
+
     else
       raise "Unsupported type #{@type}"
     end
-    h1 = second_stage.input_capacitance / first_stage.input_capacitance
 
-    h2 = load_cap.to_f / second_stage.input_capacitance
-    first_stage.delay(h1) + second_stage.delay(h2)
-
+    first_stage.delay(second_stage.input_capacitance) + second_stage.delay(load_cap)
   end
 end
 
 
 class Path
   include Enumerable
+
   attr_accessor :gates, :startpoint, :endpoint
 
   def initialize(gates, startpoint = nil, endpoint = nil)
@@ -108,22 +108,9 @@ class Path
   end
 
   def delay(circuit)
-    raise ArgumentError, 'Missing circuit for delay calculation' unless circuit
-
-    @gates.sum { |g| circuit.gate_delay(g) } # we ignore wire delay for now
+    @gates.sum { |g| circuit.gate_delay(g) } # we ignore wires delay for now
   end
 end
 
 
 
-# g1 = CompositeGate.new(type: 'AND', name: 'G1', output: 'Y', inputs: ['A', 'B'], h: 2.0)
-# g2 = CompositeGate.new(type: 'OR',  name: 'G2', output: 'Z', inputs: ['A', 'B'], h: 2.0)
-# g3 = Gate.new(type: 'NAND', name: 'G3', output: 'W', inputs: ['A', 'B'], h: 2.0)
-
-# path1 = Path.new([g1, g2])
-# puts "AND-OR path delay = #{path1.delay}"
-
-
-# puts "AND delay = #{g1.delay}"
-# puts "OR delay  = #{g2.delay}"
-# puts "NAND delay = #{g3.delay}"

@@ -17,7 +17,7 @@ class Circuit
   def output_load(gate)
     sinks = fanout_gates(gate.output)
     load = sinks.sum(&:input_capacitance)
-    load += 1.0 if @outputs.include?(gate.output) # add load for output pin if gate drives a circuit output
+    load += 5.0 if @outputs.include?(gate.output) # add load for output pin if gate drives a circuit output
     load = 1.0 if load == 0.0
 
     load
@@ -32,14 +32,9 @@ class Circuit
   end
 
   def gate_delay(gate)
-     load = output_load(gate)
-
-    if gate.is_a?(CompositeGate)
-       gate.delay(load)
-    else
-       h = load / gate.input_capacitance
-       gate.delay(h)
-    end
+    load = output_load(gate)
+    gate.delay(load)
+    
   end
 
   def find_paths_to_output(output)
