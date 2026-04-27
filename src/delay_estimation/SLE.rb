@@ -1,81 +1,140 @@
 
 class Gate
-  attr_accessor :type, :name, :output, :inputs
+  attr_reader :type, :input_pins, :output_pin, :logical_effort, :parasitic_delay,
+              :input_capacitance_map
 
-  def initialize(type:, name:, output:, inputs:)
+  def initialize(type:, input_pins:, output_pin:, logical_effort:, 
+                 parasitic_delay:, input_capacitance_map:)
     @type = type.upcase
-    @name = name
-    @output = output
-    @inputs = inputs
+    @input_pins = input_pins
+    @output_pin = output_pin
+    @logical_effort = logical_effort
+    @parasitic_delay = parasitic_delay
+    @input_capacitance_map = input_capacitance_map
   end
 
-  def delay(load_cap)
-    le = logical_effort
-    h = load_cap.to_f / input_capacitance
-    le[:p] + le[:g] * h
+  def input_capacitance(pin = nil)
+ 
+      return @input_capacitance_map.values.sum / @input_capacitance_map.size
+  
   end
 
-  def input_count
-    @inputs.length
-  end
-
-
-  def input_capacitance
-    n = input_count
-
-    case @type
-    when 'INV'
-      1.0
-    when 'NAND'
-      (n + 2.0) / 3.0
-    when 'NOR'
-      (2.0 * n + 1.0) / 3.0
-    else
-      1.0
-    end
-  end
-
-
-  def logical_effort
-    n = input_count
-
-    case @type
-    when 'INV', 'NOT'
-      { g: 1.0, p: 1.0 }
-
-    when 'NAND'
-      { g: (n + 2.0) / 3.0, p: n.to_f }
-
-    when 'NOR'
-      { g: (2.0 * n + 1.0) / 3.0, p: n.to_f }
-
-    else
-      raise "Unsupported gate type #{@type}"
-    end
-  end
-
-end
-
-class CompositeGate < Gate
-  def delay(load_cap)
-    case @type
-    when 'AND'
-      first_stage = Gate.new(type: 'NAND', name: "#{@name}_nand", output: 'n1', inputs: @inputs)
-      second_stage = Gate.new(type: 'INV', name: "#{@name}_inv", output: @output, inputs: ['n1'])
-
-    when 'OR'
-      first_stage = Gate.new(type: 'NOR', name: "#{@name}_nor", output: 'n1', inputs: @inputs)
-      second_stage = Gate.new(type: 'INV', name: "#{@name}_inv", output: @output, inputs: ['n1'])
-
-    else
-      raise "Unsupported type #{@type}"
-    end
-
-    first_stage.delay(second_stage.input_capacitance) + second_stage.delay(load_cap)
+  def delay(load_cap, input_pin = nil)
+    cin = input_capacitance(input_pin)
+    cout = load_cap.to_f
+    h = cout / cin
+    g = @logical_effort
+    p = @parasitic_delay
+    g * h + p
   end
 end
 
+class CellLibrary
+  attr_reader :cells
 
+  def initialize
+    @cells = {}
+    load_standard_cells
+  end
+
+  def get_cell(type)
+    cell = @cells[type.upcase]
+    raise "type '#{type}' not found" unless cell
+    cell
+  end
+
+  def cell_exists?(type)
+    @cells.key?(type.upcase)
+  end
+
+  def add_cell(cell)
+    @cells[cell.type] = cell
+  end
+
+  private
+
+  def load_standard_cells
+
+    add_cell(Gate.new(
+      type: 'INV',
+      input_pins: ['A'],
+      output_pin: 'Y',
+      logical_effort: 1.0,
+      parasitic_delay: 1.0,
+      input_capacitance_map: { 'A' => 1.0 }
+    ))
+
+  
+    add_cell(Gate.new(
+      type: 'BUF',
+      input_pins: ['A'],
+      output_pin: 'Y',
+      logical_effort: 2.0,
+      parasitic_delay: 2.0,
+      input_capacitance_map: { 'A' => 1.0 }
+    ))
+
+    # NAND 
+    add_cell(Gate.new(
+      type: 'NAND',
+      input_pins: ['A', 'B'],
+      output_pin: 'Y',
+      logical_effort: 4.0 / 3.0,
+      parasitic_delay: 2.0,
+      input_capacitance_map: { 'A' => 4.0 , 'B' => 4.0 }
+    ))
+
+    # NOR
+    add_cell(Gate.new(
+      type: 'NOR',
+      input_pins: ['A', 'B'],
+      output_pin: 'Y',
+      logical_effort: 5.0 / 3.0,
+      parasitic_delay: 2.0,
+      input_capacitance_map: { 'A' => 5.0, 'B' => 5.0  }
+    ))
+
+    # AND (nand+inv)
+    add_cell(Gate.new(
+      type: 'AND',
+      input_pins: ['A', 'B'],
+      output_pin: 'Y',
+      logical_effort: 4.0 / 3.0 + 1.0,
+      parasitic_delay: 2.0 + 1.0,
+      input_capacitance_map: { 'A' => 4.0 , 'B' => 4.0}
+    ))
+
+    # OR
+    add_cell(Gate.new(
+      type: 'OR',
+      input_pins: ['A', 'B'],
+      output_pin: 'Y',
+      logical_effort: 5.0 / 3.0 + 1.0,
+      parasitic_delay: 2.0 + 1.0,
+      input_capacitance_map: { 'A' => 5.0, 'B' => 5.0  }
+    ))
+
+    # XOR
+    add_cell(Gate.new(
+      type: 'XOR',
+      input_pins: ['A', 'B'],
+      output_pin: 'Y',
+      logical_effort: 2.4,
+      parasitic_delay: 4.0,
+      input_capacitance_map: { 'A' => 2.0, 'B' => 2.0 }
+    ))
+
+    # XNOR
+    add_cell(Gate.new(
+      type: 'XNOR',
+      input_pins: ['A', 'B'],
+      output_pin: 'Y',
+      logical_effort: 2.4,
+      parasitic_delay: 4.0,
+      input_capacitance_map: { 'A' => 2.0, 'B' => 2.0 }
+    ))
+  end
+end
 class Path
   include Enumerable
 
@@ -111,6 +170,7 @@ class Path
     @gates.sum { |g| circuit.gate_delay(g) } # we ignore wires delay for now
   end
 end
+
 
 
 

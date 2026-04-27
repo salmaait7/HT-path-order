@@ -25,19 +25,12 @@ class Circuit
       sink_gate.input_capacitance(pin)
     end
     
-    load += 2.0 if @outputs.any? { |out| out.name == gate.output } # add load for output pin if gate drives a circuit output
+    load += 2.0 if @outputs.any? { |out| out.name == gate.output }
     load = 1.0 if load == 0.0
 
     load
   end
 
-  def electrical_effort(gate)
-    cin = gate.input_capacitance
-    cout = output_load(gate)
-
-    return 1.0 if cin == 0.0
-    cout / cin
-  end
 
   def gate_delay(gate)
     load = output_load(gate)
@@ -232,14 +225,13 @@ class NetlistParser
     ports_str = ports_str.strip
     
     if ports_str.include?('.')
-      # Named port format: .Y(out), .A(in1), .B(in2)
       ports_str.scan(/\.(\w+)\(([^)]+)\)/).each do |pin, signal|
         signal = signal.strip
         next if signal =~ /^\d+'b[01]$/ || signal == '1' || signal == '0'
         connections[pin] = signal
       end
     else
-      # Positional format: out, in1, in2
+
       signals = ports_str.split(',').map(&:strip)
       connections[cell.output_pin] = signals[0] if signals[0]
       cell.input_pins.each_with_index do |pin, idx|
