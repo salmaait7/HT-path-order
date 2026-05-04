@@ -26,7 +26,7 @@ class Circuit
     end
     
     load += 2.0 if @outputs.any? { |out| out.name == gate.output }
-    load = 1.0 if load == 0.0
+    load = 0.1 if load == 0.0
 
     load
   end
@@ -92,7 +92,7 @@ class GateInstance
     @cell = @cell_lib.get_cell(type)
     
     @output = @connections[@cell.output_pin]
-    @inputs = @cell.input_pins.map { |pin| @connections[pin] }.compact
+    @inputs = @connections.reject { |pin, _| pin == @cell.output_pin }.values.compact
   end
 
   def input_capacitance(pin = nil)
@@ -234,10 +234,10 @@ class NetlistParser
 
       signals = ports_str.split(',').map(&:strip)
       connections[cell.output_pin] = signals[0] if signals[0]
-      cell.input_pins.each_with_index do |pin, idx|
-        signal = signals[idx + 1]
+      signals[1..].each_with_index do |signal, idx|
         next unless signal
         next if signal =~ /^\d+'b[01]$/ || signal == '1' || signal == '0'
+        pin = cell.input_pins[idx] || "IN#{idx + 1}"
         connections[pin] = signal
       end
     end

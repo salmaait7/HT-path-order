@@ -14,9 +14,9 @@ class Gate
   end
 
   def input_capacitance(pin = nil)
- 
-      return @input_capacitance_map.values.sum / @input_capacitance_map.size
-  
+      return @input_capacitance_map[pin] if pin && @input_capacitance_map[pin]
+      @input_capacitance_map.values.sum / @input_capacitance_map.size
+
   end
 
   def delay(load_cap, input_pin = nil)
@@ -64,7 +64,15 @@ class CellLibrary
       input_capacitance_map: { 'A' => 1.0 }
     ))
 
-  
+    add_cell(Gate.new(
+      type: 'NOT',
+      input_pins: ['A'],
+      output_pin: 'Y',
+      logical_effort: 1.0,
+      parasitic_delay: 1.0,
+      input_capacitance_map: { 'A' => 1.0 }
+    ))
+
     add_cell(Gate.new(
       type: 'BUF',
       input_pins: ['A'],
